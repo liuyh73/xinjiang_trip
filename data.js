@@ -1,0 +1,490 @@
+// ==================== 活动类型配置 ====================
+// 为截图样式的类型色标提供映射
+export const activityTypes = {
+    flight:   { text: "航班", color: "sky",    bg: "#DBEAFE", fg: "#2563EB" },
+    train:    { text: "高铁", color: "indigo", bg: "#E0E7FF", fg: "#4338CA" },
+    transit:  { text: "交通", color: "blue",   bg: "#DBEAFE", fg: "#2563EB" },
+    drive:    { text: "自驾", color: "amber",  bg: "#FEF3C7", fg: "#B45309" },
+    spot:     { text: "景点", color: "green",  bg: "#D1FAE5", fg: "#047857" },
+    meal:     { text: "美食", color: "orange", bg: "#FED7AA", fg: "#C2410C" },
+    rest:     { text: "休闲", color: "purple", bg: "#EDE9FE", fg: "#6D28D9" },
+    hotel:    { text: "住宿", color: "rose",   bg: "#FFE4E6", fg: "#BE185D" },
+    free:     { text: "自由", color: "gray",   bg: "#F3F4F6", fg: "#4B5563" },
+};
+
+// ==================== 行程数据 ====================
+// 每个活动含 location: [lng, lat] 经纬度坐标（用于地图标注）
+// 每天的 path 数组按顺序绘制路线
+export const itinerary = [
+    {
+        day: 1,
+        date: "06.13",
+        weekday: "周六",
+        title: "启程 · 天山天池",
+        theme: "长途飞行 + 城市初探",
+        from: "各地",
+        to: "乌鲁木齐 → 伊宁",
+        activities: [
+            { time: "01:15", title: "国泰CX998 抵达乌鲁木齐", desc: "国泰航空 CX998：香港国际机场T1 01:15 起飞，07:00 抵达乌鲁木齐天山国际机场T4。车上可补觉恢复精力。", icon: "✈️", type: "flight", location: [87.4739, 43.9071], place: "乌鲁木齐地窝堡机场" },
+            { time: "08:30", title: "机场租车出发", desc: "在乌鲁木齐机场取车，出发前往天山天池，车程约1.5小时。途经阜康市。", icon: "🚗", type: "drive", location: [87.9849, 44.1581], place: "阜康市" },
+            { time: "10:00", title: "天山天池景区游览", desc: "西王母传说中的'瑶池'，湖水碧蓝澄澈，四周雪峰环抱。建议游览3-5小时，重点看主湖、定海神针、小天池。", icon: "🏔️", type: "spot", location: [88.1192, 43.8861], place: "天山天池" },
+            { time: "15:00", title: "返回乌鲁木齐站", desc: "从天池开车返回乌鲁木齐高铁站，车程约1.5小时，注意预留时间避免高峰堵车。", icon: "🚗", type: "drive", location: [87.6329, 43.7798], place: "乌鲁木齐站" },
+            { time: "17:06", title: "C847动车前往伊宁", desc: "C847 动车：17:06 乌鲁木齐出发，22:13 抵达伊宁站，全程约5小时。", icon: "🚄", type: "train", location: [81.3556, 43.9219], place: "伊宁站" },
+            { time: "22:30", title: "入住伊宁酒店", desc: "抵达伊宁后前往预订酒店，全员于今晚在伊宁会合，明日一早出发。", icon: "🏨", type: "hotel", location: [81.3297, 43.9142], place: "丽枫酒店（六星街店）" }
+        ],
+        hotel: "丽枫酒店伊宁机场六星街店",
+        hotelPrice: 404,
+        breakfast: true,
+        tips: "全员于06.13晚在伊宁会合，各成员出发地各异，请务必保持联系",
+        mapCenter: [85.5, 43.9],
+        mapZoom: 7,
+        xhsLinks: []
+    },
+    {
+        day: 2,
+        date: "06.14",
+        weekday: "周日",
+        title: "唐布拉百里画廊",
+        theme: "伊犁 → 尼勒克 → 唐布拉",
+        from: "伊犁",
+        to: "尼勒克 → 唐布拉",
+        activities: [
+            { time: "08:00", title: "六星街早餐", desc: "与王以晨一起在六星街吃早餐，可尝试俄式咖啡+列巴，或伊犁特色早茶。", icon: "🍳", type: "meal", location: [81.3297, 43.9142], place: "伊宁六星街" },
+            { time: "10:00", title: "出发前往唐布拉", desc: "从伊宁出发开车前往唐布拉百里画廊，全程约3-4小时，沿218国道。", icon: "🚗", type: "drive", location: [82.5100, 43.7900], place: "218国道" },
+            { time: "12:00", title: "途经蜜蜂小镇", desc: "蜜蜂小镇是唐布拉景观起点，从这里到乔尔玛之间是最精华的百里画廊段。", icon: "🐝", type: "spot", location: [82.8500, 43.7600], place: "尼勒克蜜蜂小镇" },
+            { time: "14:00", title: "孟克特景区探秘", desc: "孟克特自驾票200元（最多5人，超过40/人）。备好干粮，景区内没有餐饮服务。沿途雪山草原相映。", icon: "🌄", type: "spot", location: [83.7500, 43.5500], place: "孟克特景区" },
+            { time: "18:00", title: "返回民宿晚餐", desc: "返回尼勒克古道兰亭民宿，品尝当地羊肉。", icon: "🍖", type: "meal", location: [82.5111, 43.7903], place: "尼勒克县" },
+            { time: "20:00", title: "入住兰亭民宿", desc: "尼勒克古道兰亭民宿，¥620/晚含早餐，欣赏星空。", icon: "🏡", type: "hotel", location: [82.5111, 43.7903], place: "古道兰亭民宿" }
+        ],
+        hotel: "尼勒克古道兰亭民宿",
+        hotelPrice: 620,
+        breakfast: true,
+        tips: "孟克特自驾票200元（最多5人，超过40元/人），需提前购买。或选择仙女湖骑马200/人，综合评估孟克特更好",
+        mapCenter: [82.8, 43.75],
+        mapZoom: 8,
+        xhsLinks: [
+            { title: "唐布拉百里画廊｜雪山草原日出攻略", url: "https://www.xiaohongshu.com/explore/6839a2f3000000002102f163?xsec_token=ABcvqUh4VRHvLikSyRLtJML7tgyHWtXZZY4v4Ls0rABUA=&xsec_source=pc_search&source=web_note_detail_r10" },
+            { title: "唐布拉 vs 孟克特 自驾深度游", url: "https://www.xiaohongshu.com/explore/6852add20000000023005393?xsec_token=ABXsG6B_imbIMXv0gsFWO-AU6gWpBQYNQB8WIqcJihoss=&xsec_source=pc_search&source=web_search_result_notes" },
+            { title: "唐布拉沿途拍照打卡机位", url: "https://www.xiaohongshu.com/explore/6810a3ef000000002202f0f5?xsec_token=AB-NKHJMeE8YMB7aezrjeeyHjOX9sUeYR1Ll5PALAjS6g=&xsec_source=pc_search&source=web_search_result_notes" }
+        ]
+    },
+    {
+        day: 3,
+        date: "06.15",
+        weekday: "周一",
+        title: "巴音布鲁克草原",
+        theme: "唐布拉 → 独库中段 → 巴音布鲁克",
+        from: "唐布拉",
+        to: "独库公路中段 → 巴音布鲁克",
+        activities: [
+            { time: "09:00", title: "从唐布拉出发", desc: "从尼勒克出发，经独库公路中段进入巴音布鲁克，全程约5-6小时。", icon: "🚗", type: "drive", location: [82.5111, 43.7903], place: "尼勒克" },
+            { time: "11:00", title: "独库公路中段", desc: "被誉为中国最美公路，一天穿四季。请注意限速和加油点。", icon: "🛣️", type: "drive", location: [84.1500, 43.3000], place: "独库公路中段" },
+            { time: "14:00", title: "抵达巴音布鲁克", desc: "巴音布鲁克自驾票127/人，观光车票18/人。蒙古语意为'富饶泉水'。", icon: "🌾", type: "spot", location: [84.1494, 43.0272], place: "巴音布鲁克草原" },
+            { time: "16:00", title: "天鹅湖自然保护区", desc: "中国最大的天鹅栖息地，夏季可见大量野生天鹅。", icon: "🦢", type: "spot", location: [84.0800, 43.0500], place: "天鹅湖" },
+            { time: "20:00", title: "九曲十八弯·九个太阳", desc: "日落时分开都河倒映出九个太阳，绝世奇观！约21:30日落，提前1小时到达。", icon: "🌅", type: "spot", location: [84.2500, 43.0600], place: "九曲十八弯观景台" },
+            { time: "22:30", title: "入住博雅丽晶酒店", desc: "博雅丽晶酒店 ¥590/晚含早，温暖的房间和热汤是冷夜最好的慰藉。", icon: "🏨", type: "hotel", location: [84.1500, 43.0300], place: "博雅丽晶酒店" }
+        ],
+        hotel: "博雅丽晶酒店",
+        hotelPrice: 590,
+        breakfast: true,
+        tips: "巴音布鲁克自驾票127/人，观光车票18/人。日落是最佳拍摄时间（约21:30），九曲十八弯可看'九个太阳'奇观",
+        mapCenter: [83.5, 43.3],
+        mapZoom: 8,
+        xhsLinks: [
+            { title: "巴音布鲁克 · 九曲十八弯日落攻略", url: "https://www.xiaohongshu.com/explore/688dee4500000000230365c8?xsec_token=ABjHcAvYRXwo5FN2-3uwZKJgVwcJhKWZVRhR3CyIMzPAI=&xsec_source=pc_search&source=web_search_result_notes" },
+            { title: "巴音布鲁克草原超详细游玩路线", url: "https://www.xiaohongshu.com/explore/68e394230000000007016111?xsec_token=ABUUwthFj1957INPKV8EW1OD66R9RbAVyccP49ip_oU3o=&xsec_source=pc_search&source=web_search_result_notes" }
+        ]
+    },
+    {
+        day: 4,
+        date: "06.16",
+        weekday: "周二",
+        title: "库尔德宁 · 雪岭云杉",
+        theme: "巴音布鲁克 → 库尔德宁",
+        from: "巴音布鲁克",
+        to: "库尔德宁",
+        activities: [
+            { time: "09:00", title: "从巴音布鲁克出发", desc: "早餐后出发，前往库尔德宁，车程约5小时。", icon: "🚗", type: "drive", location: [84.1494, 43.0272], place: "巴音布鲁克" },
+            { time: "12:00", title: "途中午餐", desc: "在沿途的新源县城或巩留县城吃拉条子、大盘鸡。", icon: "🍜", type: "meal", location: [83.2557, 43.4300], place: "新源县" },
+            { time: "14:00", title: "抵达库尔德宁", desc: "世界自然遗产核心区，门票60元/人，区间车45元/人，自驾车50元/人。", icon: "🌲", type: "spot", location: [82.8900, 43.1800], place: "库尔德宁游客中心" },
+            { time: "15:00", title: "十里画廊·金色秋韵", desc: "自驾线路覆盖游客中心→十里画廊→金色秋韵→蜂香驿站→暗峰大本营。", icon: "🏞️", type: "spot", location: [82.9500, 43.1600], place: "十里画廊" },
+            { time: "17:00", title: "海蒂小木屋打卡", desc: "大横木、海蒂和爷爷的小木屋、飞屋环游记气球小屋等经典机位。", icon: "📸", type: "spot", location: [82.9800, 43.1500], place: "海蒂小木屋" },
+            { time: "19:00", title: "入住枕杉云居", desc: "枕杉云居民宿 ¥507/晚 不含早。民宿靠近雪岭云杉林，自然风光绝佳。", icon: "🏡", type: "hotel", location: [82.8500, 43.1700], place: "枕杉云居民宿" }
+        ],
+        hotel: "枕杉云居民宿",
+        hotelPrice: 507,
+        breakfast: false,
+        tips: "门票60元/人，区间车45元/人，自驾车50元/人（中沟检票口）。S648宝柯段限高3.3米，旺季可能堵车",
+        mapCenter: [83.5, 43.2],
+        mapZoom: 9,
+        xhsLinks: [
+            { title: "库尔德宁 · 雪岭云杉森林自驾攻略", url: "https://www.xiaohongshu.com/explore/6943caf4000000001e008c09?xsec_token=AB8A3mIjcgxmrxIm_lZF3JdOOr9z-ErTdI9X_cz8iOW4I=&xsec_source=pc_search&source=web_search_result_notes" }
+        ]
+    },
+    {
+        day: 5,
+        date: "06.17",
+        weekday: "周三",
+        title: "喀拉峻 · 空中草原",
+        theme: "库尔德宁 → 喀拉峻",
+        from: "库尔德宁",
+        to: "喀拉峻",
+        activities: [
+            { time: "09:00", title: "从库尔德宁出发", desc: "出发前往喀拉峻，车程约2.5小时。", icon: "🚗", type: "drive", location: [82.8900, 43.1800], place: "库尔德宁" },
+            { time: "11:00", title: "抵达喀拉峻景区", desc: "世界自然遗产，自驾门票160/人，有峡谷和草原两个区域。", icon: "🌱", type: "spot", location: [82.1500, 43.1500], place: "喀拉峻景区" },
+            { time: "12:00", title: "喀拉峻空中草原", desc: "立体草原，六月鲜花盛放，草原呈现曲线美。", icon: "🐎", type: "spot", location: [82.1000, 43.1400], place: "空中草原" },
+            { time: "14:00", title: "阔克苏大峡谷", desc: "鳄鱼湾、人体草原等奇观，乘船游峡谷。", icon: "🏔️", type: "spot", location: [82.0500, 43.1200], place: "阔克苏大峡谷" },
+            { time: "17:00", title: "鲜花台·猎鹰台", desc: "最佳观景点，建议穿亮色衣服，光影随风变幻。", icon: "📸", type: "spot", location: [82.1800, 43.1600], place: "鲜花台" },
+            { time: "19:00", title: "入住喀拉峻民宿", desc: "喀拉峻尘外山庄 ¥509/晚 不含早。夜晚繁星璀璨。", icon: "🏡", type: "hotel", location: [82.2000, 43.1700], place: "尘外山庄民宿" }
+        ],
+        hotel: "喀拉峻尘外山庄民宿",
+        hotelPrice: 509,
+        breakfast: false,
+        tips: "喀拉峻自驾门票160/人，有峡谷和草原两个区域。小红书推荐住景区内（乌孙夏都1000+/晚），或住景区外",
+        mapCenter: [82.3, 43.15],
+        mapZoom: 10,
+        xhsLinks: [
+            { title: "喀拉峻 · 空中草原住宿+游玩全攻略", url: "https://www.xiaohongshu.com/explore/683062e100000000230116bd?xsec_token=ABXywAW-hR04DKGKBKNRQ7EmTQ_WTvN9M-5xwAFRqzmfU=&xsec_source=pc_search&source=web_search_result_notes" },
+            { title: "喀拉峻自驾线路 & 鲜花台机位", url: "https://www.xiaohongshu.com/explore/686cc6ec000000002400ab74?xsec_token=ABCPHm8cVaob3D_xb9Y8ya27N4uGFJnt36dAbiL5FkKUI=&xsec_source=pc_search&source=web_search_result_notes" }
+        ]
+    },
+    {
+        day: 6,
+        date: "06.18",
+        weekday: "周四",
+        title: "夏塔 · 雪山圣地",
+        theme: "喀拉峻 → 特克斯 → 夏塔",
+        from: "喀拉峻",
+        to: "特克斯 → 夏塔",
+        activities: [
+            { time: "09:00", title: "从喀拉峻出发", desc: "从喀拉峻民宿出发，前往特克斯。", icon: "🚗", type: "drive", location: [82.2000, 43.1700], place: "喀拉峻" },
+            { time: "12:00", title: "特克斯午餐", desc: "在特克斯（世界上唯一完整的八卦城）吃午饭，推荐拉条子和烤包子。", icon: "🍜", type: "meal", location: [81.8400, 43.2100], place: "特克斯八卦城" },
+            { time: "13:30", title: "阿特恰比斯村观景", desc: "俯瞰特克斯全景，八卦城一览无余，拍照出片。", icon: "🏘️", type: "spot", location: [81.7500, 43.2800], place: "阿特恰比斯村" },
+            { time: "14:00", title: "行驶758县道", desc: "758县道风景绝佳，途经昭苏湿地公园、昭苏玉湖。", icon: "🛣️", type: "drive", location: [81.5200, 43.1500], place: "758县道" },
+            { time: "15:00", title: "昭苏玉湖", desc: "昭苏玉湖深处可见土拨鼠嬉戏，推荐深入腹地观秘境。", icon: "🌊", type: "spot", location: [81.1800, 43.0900], place: "昭苏玉湖" },
+            { time: "17:00", title: "夏塔徒步", desc: "自驾到将军桥，徒步至转运桥，精华段是鲜花台继续往前走部分。", icon: "🏔️", type: "spot", location: [80.8500, 42.8800], place: "夏塔景区" },
+            { time: "20:00", title: "入住隐秀山居", desc: "昭苏隐秀山居民宿 ¥838/晚 四人间 含早，雪山就在窗前。", icon: "🏡", type: "hotel", location: [81.1500, 43.1500], place: "昭苏隐秀山居" }
+        ],
+        hotel: "昭苏隐秀山居民宿（四人间）",
+        hotelPrice: 838,
+        breakfast: true,
+        tips: "夏塔自驾票需要提前抢票！精华段为转运桥→将军桥→鲜花台。如未抢到将军桥骑马票可能排队2-3h",
+        mapCenter: [81.3, 43.0],
+        mapZoom: 9,
+        xhsLinks: [
+            { title: "夏塔 · 雪松雪山打卡点位", url: "https://www.xiaohongshu.com/explore/66bb2a3e000000001e018179?xsec_token=ABBZzSIfxUh6QV_-ktSKUm8poMoPbXJ-3z72miKYApF8I=&xsec_source=pc_search&source=web_search_result_notes" },
+            { title: "夏塔 · 转运桥→将军桥徒步路线", url: "https://www.xiaohongshu.com/explore/66a6707d0000000027011389?xsec_token=AByUISioPhtvMuwXQzIgVt-Be2vMtmAe35nZwd6Ke6sZk=&xsec_source=pc_search&source=web_search_result_notes" },
+            { title: "夏塔自驾票路线参考", url: "https://www.xiaohongshu.com/explore/68065dd6000000001c01f371?xsec_token=ABVaJomDpohlOaKZatpkkOBIc2wqAnWnvyEPlfrZCqNJg=&xsec_source=pc_search&source=web_search_result_notes" },
+            { title: "昭苏玉湖深处秘境 · 土拨鼠嬉戏", url: "https://www.xiaohongshu.com/explore/685aeaf10000000010013f5b?xsec_token=ABCe9iflsAcEa9XOa0xTgxp38iJao54-2WOMiFfFjPMso=&xsec_source=pc_search&source=web_search_result_notes" }
+        ]
+    },
+    {
+        day: 7,
+        date: "06.19",
+        weekday: "周五",
+        title: "伊昭公路 · 赛里木湖",
+        theme: "夏塔 → 伊昭公路 → 赛里木湖",
+        from: "夏塔",
+        to: "伊昭公路 → 伊宁 → 赛里木湖",
+        activities: [
+            { time: "09:00", title: "走伊昭公路", desc: "从夏塔方向走伊昭公路车较少，风景极佳，注意山路安全。", icon: "🛣️", type: "drive", location: [81.0000, 43.1500], place: "伊昭公路" },
+            { time: "13:00", title: "伊宁午饭休整", desc: "抵达伊宁吃午饭，补给物资。推荐伊犁老马手抓肉。", icon: "🍜", type: "meal", location: [81.3297, 43.9142], place: "伊宁市区" },
+            { time: "15:00", title: "出发赛里木湖", desc: "前往赛里木湖，车程约2-2.5小时，途经果子沟。", icon: "🚗", type: "drive", location: [81.0800, 44.3000], place: "果子沟方向" },
+            { time: "17:30", title: "抵达赛里木湖", desc: "海拔2073米，'大西洋最后一滴眼泪'。顺逆时针环湖皆可。", icon: "🌊", type: "spot", location: [81.1917, 44.5500], place: "赛里木湖" },
+            { time: "21:30", title: "湖面日落拍摄", desc: "日落时分湖面蓝紫交织，野花点缀草原，最佳拍照时段。", icon: "🌅", type: "spot", location: [81.1500, 44.5700], place: "西海草原" },
+            { time: "22:30", title: "入住蓝溪汐酒店", desc: "赛里木湖蓝溪汐酒店 ¥810/晚 不含早。湖边风大请注意保暖。", icon: "🏨", type: "hotel", location: [81.2000, 44.5600], place: "蓝溪汐酒店" }
+        ],
+        hotel: "赛里木湖蓝溪汐酒店",
+        hotelPrice: 810,
+        breakfast: false,
+        tips: "夏塔→赛里木湖约4.5h（伊昭公路从夏塔方向车较少），根据日落时间提前抵达以免错过最佳光线",
+        mapCenter: [81.2, 44.0],
+        mapZoom: 8,
+        xhsLinks: [
+            { title: "赛里木湖 · 逆时针环湖+日落机位", url: "https://www.xiaohongshu.com/explore/688a2464000000002501d45b?xsec_token=ABU8XDJL9fVmpiLd3zmDpt7XtKtTW4qnsOf_yIuH0gZ4o=&xsec_source=pc_search&source=web_search_result_notes" }
+        ]
+    },
+    {
+        day: 8,
+        date: "06.20",
+        weekday: "周六",
+        title: "赛里木湖环湖",
+        theme: "赛里木湖 → 果子沟 → 伊宁",
+        from: "赛里木湖",
+        to: "果子沟大桥 → 伊宁",
+        activities: [
+            { time: "08:00", title: "清晨湖边拍照", desc: "清晨湖边温度低，薄雾飘动湖面如画。", icon: "📸", type: "spot", location: [81.1917, 44.5500], place: "赛里木湖东岸" },
+            { time: "10:00", title: "顺时针环游湖", desc: "环湖公路约100公里。点将台、天鹅滩、西海草原是核心机位。", icon: "🌊", type: "spot", location: [81.1000, 44.5800], place: "西海草原" },
+            { time: "14:00", title: "果子沟大桥", desc: "新疆第一座特大桥梁，双塔双索面斜拉桥，与两岸山谷形成绝美画面。", icon: "🌉", type: "spot", location: [80.8500, 44.3800], place: "果子沟大桥" },
+            { time: "16:00", title: "薰衣草基地（可选）", desc: "解忧公主薰衣草园可选前往，6月中下旬是最佳花期。", icon: "💜", type: "spot", location: [80.6500, 44.0800], place: "薰衣草基地" },
+            { time: "18:00", title: "抵达伊宁晚餐", desc: "返回伊宁市区，晚上可逛六星街夜色，自由安排晚餐。", icon: "🍽️", type: "meal", location: [81.3297, 43.9142], place: "伊宁六星街" }
+        ],
+        hotel: "伊宁自由安排",
+        hotelPrice: 0,
+        breakfast: false,
+        tips: "薰衣草基地评价一般可选择性前往。建议晚上逛六星街，体验伊犁夜晚风情",
+        mapCenter: [81.0, 44.2],
+        mapZoom: 8,
+        xhsLinks: [
+            { title: "赛里木湖 · 清晨环湖拍摄全攻略", url: "https://www.xiaohongshu.com/explore/682f32c9000000002100afdc?xsec_token=ABd1uPdYM_ztWgFLS0KSM-se0DCMM4n0l6SuL-xurr-5A=&xsec_source=pc_search&source=web_search_result_notes" }
+        ]
+    },
+    {
+        day: 9,
+        date: "06.21",
+        weekday: "周日",
+        title: "返程 · 再见新疆",
+        theme: "伊宁 → 各自城市",
+        from: "伊宁",
+        to: "深圳/上海/郑州/北京",
+        activities: [
+            { time: "09:00", title: "市内自由活动", desc: "可以再逛逛六星街、汉人街，买些伊犁特产。", icon: "🌇", type: "free", location: [81.3297, 43.9142], place: "伊宁市区" },
+            { time: "12:00", title: "前往机场办理登机", desc: "打车前往伊宁机场，提前2小时到达。", icon: "✈️", type: "transit", location: [81.3301, 43.9576], place: "伊宁机场" },
+            { time: "14:00", title: "各自飞往城市", desc: "挥手告别，珍重再见！记得分享你们的照片和故事~", icon: "👋", type: "flight", location: [81.3301, 43.9576], place: "伊宁机场" }
+        ],
+        hotel: null,
+        hotelPrice: 0,
+        tips: "行程完美结束！祝各位旅途顺利，早日团聚",
+        mapCenter: [81.35, 43.94],
+        mapZoom: 12,
+        xhsLinks: []
+    }
+];
+
+// ==================== 景点数据 ====================
+export const spots = [
+    {
+        id: "tianshan",
+        name: "天山天池",
+        nameEn: "Tianshan Tianchi",
+        day: "Day 1",
+        category: "lake",
+        categoryText: "高山湖泊",
+        tag: "5A景区",
+        img: "https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/0c0771eb-1e27-41f6-a597-9ed27d094fc4/image_1778080023_3_3.jpg",
+        altitude: "海拔 1,910m",
+        duration: "3-5 小时",
+        ticket: "约 ¥125",
+        desc: "天山天池是中国著名的高山湖泊，古称'瑶池'，传说西王母宴请周穆王之处。湖水碧蓝澄澈，四周雪峰环抱，白云倒映其中，被誉为'天山明珠'。",
+        highlights: [
+            "湖面海拔1910米，长3.4公里，平均深度约40米",
+            "四周雪岭云杉成林，'东方瑞士'的美誉",
+            "瑶池、小天池、定海神针古榆等多处打卡点",
+            "夏季可乘船游湖，冬季可观雪山冰湖"
+        ],
+        tip: "08:00开门，建议上午到达避开旅行团。如要赶17:06的高铁，请控制游玩时间在3小时内"
+    },
+    {
+        id: "tangbula",
+        name: "唐布拉百里画廊",
+        nameEn: "Tangbula",
+        day: "Day 2",
+        category: "grassland",
+        categoryText: "草原峡谷",
+        tag: "独库精华",
+        img: "https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/c948b918-ebce-4b99-8085-d87acdadf699/image_1778080031_1_1.jpg",
+        altitude: "海拔 1,800-2,400m",
+        duration: "半日-一日",
+        ticket: "孟克特自驾 ¥200/车",
+        desc: "唐布拉百里画廊是独库公路段最美的风景线之一，沿途草原、雪山、河流、森林层次分明。从蜜蜂小镇到乔尔玛之间尤为出彩，被誉为'新疆美景天花板'。",
+        highlights: [
+            "孟克特景区：最多5人自驾票¥200，超过40/人",
+            "仙女湖：可骑马游览，体验价¥200/人",
+            "沿途开阔草原与雪山景观交相辉映",
+            "乔尔玛英雄纪念碑，独库公路修建者的纪念地"
+        ],
+        tip: "孟克特 vs 仙女湖二选一，孟克特整体评价更高。途中景色极好，建议预留充足拍照时间"
+    },
+    {
+        id: "bayanbulak",
+        name: "巴音布鲁克草原",
+        nameEn: "Bayanbulak",
+        day: "Day 3",
+        category: "grassland",
+        categoryText: "高山湿地",
+        tag: "5A景区",
+        img: "https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/d7eb5984-f23c-4185-9e80-1624a660776f/image_1778080041_3_1.jpg",
+        altitude: "海拔 2,500m",
+        duration: "半日-一日",
+        ticket: "自驾 ¥127/人 + ¥18观光车",
+        desc: "巴音布鲁克是中国第二大草原，蒙古语意为'富饶的泉水'。九曲十八弯日落时的'九个太阳'是摄影师梦寐以求的奇观，也是天鹅湖自然保护区所在地。",
+        highlights: [
+            "九曲十八弯日落时开都河倒映出九个太阳，绝世奇观",
+            "天鹅湖是中国最大的野生天鹅栖息地",
+            "高山草原-湿地-雪山三重景观",
+            "可看到众多蒙古族牧民与毡房"
+        ],
+        tip: "日落时间约21:30，请提前1-1.5小时到达观景台占位。观光车必购，建议准备厚外套"
+    },
+    {
+        id: "kuerdening",
+        name: "库尔德宁",
+        nameEn: "Kuerdening",
+        day: "Day 4",
+        category: "mountain",
+        categoryText: "云杉森林",
+        tag: "世界自然遗产",
+        img: "https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/04ae0675-0764-4183-b12e-8b10cc9849a3/image_1778080059_2_3.jpg",
+        altitude: "海拔 1,500-2,000m",
+        duration: "半日",
+        ticket: "门票¥60 + 区间车¥45 或 自驾¥50",
+        desc: "库尔德宁是世界自然遗产'新疆天山'的核心区域，拥有最茂密、最壮观的雪岭云杉森林，被誉为'天山山脉的植物博物馆'。",
+        highlights: [
+            "覆盖游客中心→十里画廊→金色秋韵→蜂香驿站→暗峰大本营",
+            "大横木、海蒂小木屋、飞屋环游记气球小屋等绝美机位",
+            "雪岭云杉古树成林，生态原始",
+            "适合森林徒步与慢游"
+        ],
+        tip: "S648宝柯段限高3.3米，大车绕行。自驾线路(绿色)为核心游览线路，旺季可能堵车"
+    },
+    {
+        id: "kalajun",
+        name: "喀拉峻大草原",
+        nameEn: "Kalajun",
+        day: "Day 5",
+        category: "grassland",
+        categoryText: "立体草原",
+        tag: "世界遗产",
+        img: "https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/3269fd67-39be-430b-9ed2-02fdc41df821/image_1778080066_1_1.jpg",
+        altitude: "海拔 2,000-3,500m",
+        duration: "一日",
+        ticket: "自驾¥160/人",
+        desc: "喀拉峻是世界自然遗产，以'立体草原'闻名——同时可见草原、雪山、峡谷三重景观。6月鲜花盛放，草原呈现梦幻曲线美。",
+        highlights: [
+            "空中草原、人体草原、五花草甸",
+            "阔克苏大峡谷、鳄鱼湾奇观",
+            "鲜花台、猎鹰台最佳观景点",
+            "草原曲线随光影变换，犹如女人体态"
+        ],
+        tip: "草原区和峡谷区分开游览，全程自驾。6月正是花季，建议穿亮色衣服出片"
+    },
+    {
+        id: "xiata",
+        name: "夏塔古道",
+        nameEn: "Xiata",
+        day: "Day 6",
+        category: "mountain",
+        categoryText: "雪山圣境",
+        tag: "登山圣地",
+        img: "https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/0a6b4647-9f38-48e7-a70d-8c4531276cf0/image_1778080075_1_1.jpg",
+        altitude: "海拔 1,800-3,500m",
+        duration: "一日",
+        ticket: "自驾票需抢购",
+        desc: "夏塔古道是古代丝绸之路之一，也是通往天山南北的重要通道。两侧雪峰对峙，木扎尔特冰川是哈萨克族人心中的圣地。",
+        highlights: [
+            "转运桥→将军桥徒步段最精华",
+            "鲜花台可同框雪松+雪山",
+            "7000米级的汗腾格里峰就在视野之中",
+            "古丝绸之路历史遗迹"
+        ],
+        tip: "⚠️ 自驾票极难抢，一定要提前！如未抢到将军桥骑马票可能排队2-3h。建议徒步到鲜花台"
+    },
+    {
+        id: "duku",
+        name: "独库公路",
+        nameEn: "Duku Highway",
+        day: "贯穿全程",
+        category: "road",
+        categoryText: "景观公路",
+        tag: "中国最美公路",
+        img: "https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/9e0e4e13-5ee6-4c82-a3eb-62ba53f5c5c2/image_1778080090_1_1.jpg",
+        altitude: "海拔 0-3,300m",
+        duration: "2-3日",
+        ticket: "免费",
+        desc: "独库公路连通独山子与库车，全长561公里，一日可穿四季、十里不同天。被誉为'中国最美公路'，每年仅6-10月开放通行。",
+        highlights: [
+            "一日四季：沙漠戈壁→草原→雪山→森林",
+            "巴音布鲁克、唐布拉都在沿线",
+            "乔尔玛纪念碑、哈希勒根达坂",
+            "高山峡谷段风景最壮丽"
+        ],
+        tip: "限速严格，弯道多，注意安全。加油站较少，务必规划加油时点"
+    },
+    {
+        id: "sayram",
+        name: "赛里木湖",
+        nameEn: "Sayram Lake",
+        day: "Day 7-8",
+        category: "lake",
+        categoryText: "高山冷水湖",
+        tag: "5A · 大西洋最后一滴眼泪",
+        img: "https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/6a8bdb5e-192f-423b-8b17-6256cc48c7ff/image_1778080099_2_1.jpg",
+        altitude: "海拔 2,073m",
+        duration: "1-2 日",
+        ticket: "¥70/人",
+        desc: "赛里木湖蒙古语意为'山脊梁上的湖'，被誉为'大西洋最后一滴眼泪'。湖水呈现梦幻蓝色，四季皆景，是新疆最美的湖泊之一。",
+        highlights: [
+            "环湖公路约100km，自驾最佳",
+            "点将台、天鹅滩、西海草原核心点位",
+            "6月野花盛开，湖色蓝紫交织",
+            "清晨日出和日落时分最美"
+        ],
+        tip: "湖边风大温度低，准备厚外套。建议环湖一圈，顺时针或逆时针都行"
+    },
+    {
+        id: "guozigou",
+        name: "果子沟大桥",
+        nameEn: "Guozigou Bridge",
+        day: "Day 8",
+        category: "road",
+        categoryText: "地标建筑",
+        tag: "打卡圣地",
+        img: "https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/13108872-51f0-4989-8bee-7f25ea5f22c7/image_1778080117_1_1.jpg",
+        altitude: "海拔约 1,500m",
+        duration: "1 小时",
+        ticket: "免费",
+        desc: "果子沟大桥是新疆第一座特大桥梁，横跨果子沟峡谷，与两岸郁郁葱葱的山谷形成绝美画面，被誉为'连霍高速第一桥'。",
+        highlights: [
+            "双塔双索面斜拉桥，建筑奇观",
+            "与赛里木湖顺路，是回伊宁必经之路",
+            "可在观景台俯瞰全桥",
+            "春夏翠绿，秋季金黄"
+        ],
+        tip: "从赛里木湖回伊宁顺路经过，不需要刻意绕路"
+    },
+    {
+        id: "yining",
+        name: "伊宁六星街",
+        nameEn: "Yining Six-Star Street",
+        day: "Day 1 & 8",
+        category: "town",
+        categoryText: "特色街区",
+        tag: "网红打卡",
+        img: "https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/b51c5496-164e-4830-a05a-47ae42e7aec2/image_1778080135_2_1.jpg",
+        altitude: "海拔 664m",
+        duration: "半日",
+        ticket: "免费",
+        desc: "六星街是伊宁市最具民族特色的街区，汇聚了俄罗斯族、维吾尔族、哈萨克族等多民族建筑。彩色房屋、手风琴博物馆、咖啡馆构成独特的异域风情。",
+        highlights: [
+            "亚历山大手风琴珍藏馆",
+            "网红咖啡馆众多：黄房子、六星咖啡等",
+            "特色俄式、维式建筑",
+            "购买伊犁小毯子、刺绣等手工艺品"
+        ],
+        tip: "晚上氛围更好，有当地人表演。建议在这里吃一顿正宗新疆菜"
+    },
+    {
+        id: "lavender",
+        name: "伊犁薰衣草",
+        nameEn: "Lavender Fields",
+        day: "Day 8",
+        category: "town",
+        categoryText: "花海",
+        tag: "可选景点",
+        img: "https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/910eeec5-e5e1-4379-9443-3a5392303f15/image_1778080148_3_3.jpg",
+        altitude: "海拔 600-800m",
+        duration: "1-2 小时",
+        ticket: "约¥40-60",
+        desc: "伊犁是中国薰衣草之乡，与法国普罗旺斯同处北纬43度。每年6月中下旬至7月初是最佳花期，紫色花海一望无际。",
+        highlights: [
+            "解忧公主薰衣草园最著名",
+            "紫色花海拍照圣地",
+            "精油、香水等伴手礼",
+            "与南法薰衣草同期绽放"
+        ],
+        tip: "小红书评价一般，时间紧张可跳过。如想观赏紫色花海，可前往解忧公主薰衣草园"
+    }
+];
+
+// 分享文案
+export const shareText = "🏔️ 2026端午新疆9天8晚环线攻略 · 独库公路+巴音布鲁克+喀拉峻+赛里木湖";

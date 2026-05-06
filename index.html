@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏔️ 2026端午新疆环线 · 9天8晚伊犁深度游</title>
+    <meta name="description" content="2026年端午节新疆伊犁9天8晚深度游，独库公路-巴音布鲁克-喀拉峻-夏塔-赛里木湖完整攻略">
+    <!-- 内联 SVG favicon，避免 404 -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏔️</text></svg>">
+
+    <!-- ============ 关键 fallback 样式（首屏内联，GitHub Pages 慢网络也可正常显示） ============ -->
+    <style>
+        /* 基础布局/颜色 fallback：万一 Tailwind CDN 加载失败也不至于完全裸奔 */
+        body { margin: 0; font-family: 'Noto Sans SC', system-ui, -apple-system, sans-serif; background: #F5F7FA; color: #2C3E50; -webkit-font-smoothing: antialiased; }
+        /* Leaflet divIcon 默认样式覆盖：避免 marker 变成方块 */
+        .leaflet-div-icon { background: transparent !important; border: 0 !important; }
+        /* 地图容器基础背景，防止加载慢时空白 */
+        #overviewMap, #dayMap { background: #eaf3f8; }
+    </style>
+
+    <!-- Tailwind CSS（必须最先加载） -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'xj-ink': '#2C3E50',
+                        'xj-snow': '#F5F7FA',
+                        'xj-gold': '#D4A574',
+                        'xj-sunset': '#E8833A',
+                        'xj-deep': '#1B2838',
+                        'xj-sky': '#4A90D9',
+                        'xj-grass': '#7BA05B',
+                    },
+                    fontFamily: {
+                        'serif-sc': ['"Noto Serif SC"', 'serif'],
+                        'sans-sc': ['"Noto Sans SC"', 'Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css">
+    <!-- Leaflet 地图（多 CDN 备用，保证外网环境也可访问） -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- 自定义样式（放在 Leaflet 之后以确保覆盖；带版本号避免 GitHub Pages 强缓存） -->
+    <link rel="stylesheet" href="styles.css?v=20260507">
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // ============ Tailwind CDN 动态 DOM 兼容处理 ============
+        // cdn.tailwindcss.com 默认只扫描初始 DOM，对 main.js 动态生成的 HTML（如活动卡片、
+        // Day 按钮、景点卡片等）不会生成对应的工具类样式，从而导致 GitHub Pages 上
+        // 出现"卡片变纯文本""布局塌缩"等问题。此处通过定期调用 Tailwind refresh 接口重新扫描。
+        (function setupTailwindAutoRefresh() {
+            function refresh() {
+                try {
+                    if (window.tailwind && typeof window.tailwind.refresh === 'function') {
+                        window.tailwind.refresh();
+                    }
+                } catch (e) { /* 忽略 */ }
+            }
+            // 页面加载完成后几次节流刷新，覆盖大部分动态渲染场景
+            window.addEventListener('DOMContentLoaded', () => {
+                [100, 400, 900, 1800, 3500].forEach(ms => setTimeout(refresh, ms));
+            });
+            window.addEventListener('load', () => setTimeout(refresh, 200));
+            // 使用 MutationObserver 监听大段 DOM 变化，节流触发刷新
+            let pending = null;
+            const mo = new MutationObserver(() => {
+                if (pending) return;
+                pending = setTimeout(() => { pending = null; refresh(); }, 250);
+            });
+            window.addEventListener('DOMContentLoaded', () => {
+                mo.observe(document.body, { childList: true, subtree: true });
+            });
+        })();
+    </script>
+    <script>
+        // 若主 CDN 未成功加载 Leaflet，则尝试备用 CDN
+        (function loadLeafletFallback(){
+            if (typeof L !== 'undefined') return;
+            var tried = 0;
+            var cdns = [
+                'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
+                'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js'
+            ];
+            function next(){
+                if (tried >= cdns.length) { console.error('所有 Leaflet CDN 都加载失败'); return; }
+                var s = document.createElement('script');
+                s.src = cdns[tried++];
+                s.onerror = next;
+                document.head.appendChild(s);
+            }
+            next();
+            // 同步追加备用 css
+            var cssFallbacks = [
+                'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
+                'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css'
+            ];
+            cssFallbacks.forEach(function(href){
+                var l = document.createElement('link');
+                l.rel = 'stylesheet';
+                l.href = href;
+                document.head.appendChild(l);
+            });
+        })();
+    </script>
+</head>
+<body class="font-sans-sc bg-xj-snow text-xj-ink antialiased">
+
+    <!-- 顶部导航 -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="text-2xl">🏔️</span>
+                <span class="font-serif-sc font-bold text-lg text-white nav-logo">西域·九日</span>
+            </div>
+            <div class="hidden md:flex items-center gap-8 text-sm text-white nav-links">
+                <a href="#hero" class="hover:text-xj-gold transition">首页</a>
+                <a href="#overview" class="hover:text-xj-gold transition">行程概览</a>
+                <a href="#timeline" class="hover:text-xj-gold transition">每日行程</a>
+                <a href="#spots" class="hover:text-xj-gold transition">景点介绍</a>
+                <a href="#hotels" class="hover:text-xj-gold transition">住宿安排</a>
+                <a href="#tips" class="hover:text-xj-gold transition">实用贴士</a>
+            </div>
+            <div class="flex items-center gap-2">
+                <button id="editBtn" class="px-3 py-2 bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/30 text-white text-sm rounded-full transition flex items-center gap-1" title="编辑行程数据">
+                    <i class="ri-edit-line"></i>
+                    <span class="hidden sm:inline">编辑</span>
+                </button>
+                <button id="shareBtn" class="px-4 py-2 bg-xj-gold/90 hover:bg-xj-gold text-white text-sm rounded-full transition flex items-center gap-1">
+                    <i class="ri-share-line"></i>
+                    <span class="hidden sm:inline">分享</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero 首屏 -->
+    <section id="hero" class="relative h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/38487e32-8e2c-4ee0-8d25-b47b8bc6a642/image_1778050711_1_1.jpg" 
+                 alt="新疆雪山" class="w-full h-full object-cover scale-105 hero-img">
+            <div class="absolute inset-0 bg-gradient-to-b from-xj-deep/40 via-xj-deep/20 to-xj-deep/80"></div>
+        </div>
+        
+        <div class="relative z-10 text-center text-white px-6 max-w-5xl">
+            <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-6 fade-in">
+                <span class="w-2 h-2 bg-xj-gold rounded-full animate-pulse"></span>
+                <span class="text-sm tracking-widest">2026 · 端午 · 九日环线</span>
+            </div>
+            <h1 class="font-serif-sc text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-tight fade-in fade-delay-1">
+                <span class="block">西域山河</span>
+                <span class="block text-xj-gold mt-2">一眼千年</span>
+            </h1>
+            <p class="text-lg md:text-2xl font-light tracking-wide mb-4 fade-in fade-delay-2">
+                独库公路 · 巴音布鲁克 · 喀拉峻 · 夏塔 · 赛里木湖
+            </p>
+            <p class="text-sm md:text-base text-white/80 mb-12 fade-in fade-delay-2">
+                06.13 — 06.21 · 伊犁深度环线 · 9 DAYS 8 NIGHTS
+            </p>
+            
+            <div class="flex flex-wrap justify-center gap-4 fade-in fade-delay-3">
+                <a href="#timeline" class="px-8 py-3 bg-xj-gold hover:bg-xj-sunset text-white rounded-full transition-all hover:scale-105 shadow-lg flex items-center gap-2">
+                    <i class="ri-road-map-line"></i>
+                    开启行程
+                </a>
+                <a href="#spots" class="px-8 py-3 bg-white/10 backdrop-blur-md hover:bg-white/20 border border-white/30 text-white rounded-full transition-all hover:scale-105 flex items-center gap-2">
+                    <i class="ri-landscape-line"></i>
+                    景点探索
+                </a>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 max-w-4xl mx-auto fade-in fade-delay-3">
+                <div class="text-center">
+                    <div class="text-3xl md:text-4xl font-serif-sc font-bold text-xj-gold">9</div>
+                    <div class="text-xs md:text-sm text-white/70 mt-1">天行程</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl md:text-4xl font-serif-sc font-bold text-xj-gold">12+</div>
+                    <div class="text-xs md:text-sm text-white/70 mt-1">核心景点</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl md:text-4xl font-serif-sc font-bold text-xj-gold">1800</div>
+                    <div class="text-xs md:text-sm text-white/70 mt-1">公里路程</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl md:text-4xl font-serif-sc font-bold text-xj-gold">8</div>
+                    <div class="text-xs md:text-sm text-white/70 mt-1">人小团</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 text-white animate-bounce">
+            <i class="ri-arrow-down-line text-2xl"></i>
+        </div>
+    </section>
+
+    <!-- 行程概览 -->
+    <section id="overview" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <div class="inline-block px-4 py-1 bg-xj-gold/10 text-xj-gold text-sm rounded-full mb-4">OVERVIEW</div>
+                <h2 class="font-serif-sc text-4xl md:text-5xl font-bold mb-4">行程概览</h2>
+                <p class="text-gray-500 max-w-2xl mx-auto">从天山天池到赛里木湖，穿越伊犁的草原、雪山、峡谷与花海，一场与西域山河的深度邂逅</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6 mb-16">
+                <div class="p-8 rounded-3xl bg-gradient-to-br from-blue-50 to-white border border-blue-100 hover:shadow-xl transition">
+                    <div class="w-14 h-14 rounded-2xl bg-xj-sky/10 flex items-center justify-center mb-4">
+                        <i class="ri-calendar-event-line text-3xl text-xj-sky"></i>
+                    </div>
+                    <h3 class="font-serif-sc text-2xl font-bold mb-2">出行时间</h3>
+                    <p class="text-gray-600 leading-relaxed">2026年6月13日 — 6月21日<br>端午小长假 + 年假4天</p>
+                </div>
+                <div class="p-8 rounded-3xl bg-gradient-to-br from-amber-50 to-white border border-amber-100 hover:shadow-xl transition">
+                    <div class="w-14 h-14 rounded-2xl bg-xj-gold/10 flex items-center justify-center mb-4">
+                        <i class="ri-car-line text-3xl text-xj-gold"></i>
+                    </div>
+                    <h3 class="font-serif-sc text-2xl font-bold mb-2">出行方式</h3>
+                    <p class="text-gray-600 leading-relaxed">飞机抵达乌鲁木齐/伊宁<br>伊犁全程自驾环线</p>
+                </div>
+                <div class="p-8 rounded-3xl bg-gradient-to-br from-green-50 to-white border border-green-100 hover:shadow-xl transition">
+                    <div class="w-14 h-14 rounded-2xl bg-xj-grass/10 flex items-center justify-center mb-4">
+                        <i class="ri-team-line text-3xl text-xj-grass"></i>
+                    </div>
+                    <h3 class="font-serif-sc text-2xl font-bold mb-2">出行人员</h3>
+                    <p class="text-gray-600 leading-relaxed">8人小团 · 深港沪京郑汇合<br>最晚06.13晚在伊犁会合</p>
+                </div>
+            </div>
+
+            <!-- 环线路线图 -->
+            <div class="rounded-3xl bg-gradient-to-br from-xj-deep to-xj-sky p-8 md:p-12 text-white shadow-2xl">
+                <h3 class="font-serif-sc text-2xl md:text-3xl font-bold mb-8 text-center">✈️ 环线路线图</h3>
+                <div class="flex flex-wrap items-center justify-center gap-3 text-sm md:text-base">
+                    <span class="route-node">乌鲁木齐</span>
+                    <i class="ri-arrow-right-line text-xj-gold"></i>
+                    <span class="route-node">伊宁</span>
+                    <i class="ri-arrow-right-line text-xj-gold"></i>
+                    <span class="route-node">唐布拉</span>
+                    <i class="ri-arrow-right-line text-xj-gold"></i>
+                    <span class="route-node">巴音布鲁克</span>
+                    <i class="ri-arrow-right-line text-xj-gold"></i>
+                    <span class="route-node">库尔德宁</span>
+                    <i class="ri-arrow-right-line text-xj-gold"></i>
+                    <span class="route-node">喀拉峻</span>
+                    <i class="ri-arrow-right-line text-xj-gold"></i>
+                    <span class="route-node">夏塔</span>
+                    <i class="ri-arrow-right-line text-xj-gold"></i>
+                    <span class="route-node">赛里木湖</span>
+                    <i class="ri-arrow-right-line text-xj-gold"></i>
+                    <span class="route-node">伊宁</span>
+                </div>
+            </div>
+
+            <!-- 全程大地图 -->
+            <div class="mt-12 rounded-3xl overflow-hidden shadow-2xl border border-gray-100 bg-white">
+                <div class="p-5 flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 bg-gradient-to-r from-white via-amber-50/30 to-white">
+                    <div class="flex items-center gap-3">
+                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-xj-gold to-xj-sunset flex items-center justify-center shadow-lg shadow-xj-gold/30">
+                            <i class="ri-map-2-line text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-serif-sc text-xl font-bold">全程行程地图</h3>
+                            <p class="text-xs text-gray-500 mt-0.5">真实路网路线 · 点击标记查看详情</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 text-xs text-gray-600 flex-wrap">
+                        <span class="flex items-center gap-1.5 px-2.5 py-1 bg-white rounded-full border border-gray-200"><span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>Day 1</span>
+                        <span class="flex items-center gap-1.5 px-2.5 py-1 bg-white rounded-full border border-gray-200"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>Day 2</span>
+                        <span class="flex items-center gap-1.5 px-2.5 py-1 bg-white rounded-full border border-gray-200"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>Day 4</span>
+                        <span class="flex items-center gap-1.5 px-2.5 py-1 bg-white rounded-full border border-gray-200"><span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>Day 6</span>
+                        <span class="hidden md:flex items-center gap-1.5 text-gray-400"><i class="ri-information-line"></i>共9色代表9天</span>
+                    </div>
+                </div>
+                <div id="overviewMap" style="height: 520px; width: 100%;"></div>
+            </div>
+
+            <!-- 成员汇合 -->
+            <div class="mt-16">
+                <h3 class="font-serif-sc text-2xl font-bold mb-6 text-center">🛫 成员汇合方式</h3>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                    <div class="member-card">
+                        <div class="text-2xl mb-2">🇭🇰</div>
+                        <div class="font-semibold">刘亚辉 · 张问津</div>
+                        <div class="text-xs text-gray-500 mt-1">香港 → 乌鲁木齐</div>
+                        <div class="text-xs text-xj-sky mt-1">CX998 · 01:15</div>
+                    </div>
+                    <div class="member-card">
+                        <div class="text-2xl mb-2">🏙️</div>
+                        <div class="font-semibold">孙长江 · 王星星 · 伍治鑫</div>
+                        <div class="text-xs text-gray-500 mt-1">上海 → 乌鲁木齐/伊犁</div>
+                    </div>
+                    <div class="member-card">
+                        <div class="text-2xl mb-2">🌆</div>
+                        <div class="font-semibold">赵一霖 · 彭钰欣</div>
+                        <div class="text-xs text-gray-500 mt-1">郑州 → 乌鲁木齐/伊犁</div>
+                    </div>
+                    <div class="member-card">
+                        <div class="text-2xl mb-2">🏛️</div>
+                        <div class="font-semibold">何迪</div>
+                        <div class="text-xs text-gray-500 mt-1">北京 → 乌鲁木齐</div>
+                    </div>
+                    <div class="member-card">
+                        <div class="text-2xl mb-2">🌏</div>
+                        <div class="font-semibold">赵江</div>
+                        <div class="text-xs text-gray-500 mt-1">出发地待定</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 每日行程 (卡片式 · Day切换) -->
+    <section id="timeline" class="py-24 bg-gradient-to-b from-xj-snow to-white">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-10">
+                <div class="inline-block px-4 py-1 bg-xj-sky/10 text-xj-sky text-sm rounded-full mb-4">ITINERARY</div>
+                <h2 class="font-serif-sc text-4xl md:text-5xl font-bold mb-3">9天8晚行程安排</h2>
+                <p class="text-gray-500">科学规划每日行程 · 轻松不赶路 · 每日可切换查看</p>
+            </div>
+
+            <!-- Day 切换按钮 -->
+            <div id="dayTabs" class="flex flex-wrap justify-center gap-2 md:gap-3 mb-10"></div>
+
+            <!-- 行程内容 -->
+            <div class="grid lg:grid-cols-5 gap-8">
+                <!-- 左侧时间轴 -->
+                <div class="lg:col-span-3">
+                    <div id="dayHeader" class="mb-8 text-center"></div>
+                    <div id="dayActivities" class="day-activities"></div>
+                </div>
+                <!-- 右侧地图 -->
+                <div class="lg:col-span-2">
+                    <div class="sticky top-24">
+                        <div class="rounded-3xl overflow-hidden shadow-xl border border-gray-100 bg-white">
+                            <div class="p-4 bg-gradient-to-r from-xj-gold/15 via-xj-sunset/10 to-white border-b border-gray-100">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-xj-gold to-xj-sunset flex items-center justify-center shadow-md shadow-xj-gold/30">
+                                            <i class="ri-navigation-fill text-white text-sm"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-serif-sc font-bold text-sm">今日导航</h3>
+                                            <p id="dayMapLabel" class="text-[10px] text-gray-500 mt-0.5"></p>
+                                        </div>
+                                    </div>
+                                    <span class="text-[10px] text-gray-400 bg-white/70 px-2 py-1 rounded-full border border-gray-200">
+                                        <i class="ri-road-map-line mr-0.5"></i>真实路线
+                                    </span>
+                                </div>
+                            </div>
+                            <div id="dayMap" style="height: 420px;"></div>
+                            <div id="dayPathList" class="p-4 border-t border-gray-100 bg-gray-50/40"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 景点介绍 -->
+    <section id="spots" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <div class="inline-block px-4 py-1 bg-xj-grass/10 text-xj-grass text-sm rounded-full mb-4">ATTRACTIONS</div>
+                <h2 class="font-serif-sc text-4xl md:text-5xl font-bold mb-4">景点介绍</h2>
+                <p class="text-gray-500 max-w-2xl mx-auto">深入伊犁的每一片山河，从雪山、草原到峡谷、湖泊，每一处都是天地的馈赠</p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-3 mb-12">
+                <button class="filter-btn active" data-filter="all">全部</button>
+                <button class="filter-btn" data-filter="lake">湖泊</button>
+                <button class="filter-btn" data-filter="grassland">草原</button>
+                <button class="filter-btn" data-filter="mountain">雪山</button>
+                <button class="filter-btn" data-filter="road">公路</button>
+                <button class="filter-btn" data-filter="town">城镇</button>
+            </div>
+
+            <div id="spotsContainer" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </div>
+    </section>
+
+    <!-- 住宿信息 -->
+    <section id="hotels" class="py-24 bg-gradient-to-b from-white to-xj-snow">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <div class="inline-block px-4 py-1 bg-xj-sunset/10 text-xj-sunset text-sm rounded-full mb-4">ACCOMMODATION</div>
+                <h2 class="font-serif-sc text-4xl md:text-5xl font-bold mb-4">住宿安排</h2>
+                <p class="text-gray-500">8晚住宿 · 全部已预订</p>
+            </div>
+
+            <div id="hotelsContainer" class="grid md:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+
+            <div class="mt-12 p-8 rounded-3xl bg-gradient-to-r from-xj-gold/10 to-xj-sunset/10 border border-xj-gold/20 text-center">
+                <div class="text-sm text-gray-500 mb-2">八晚住宿总预算</div>
+                <div id="hotelTotal" class="font-serif-sc text-4xl md:text-5xl font-bold text-xj-sunset">¥ 0</div>
+                <div id="hotelAvg" class="text-sm text-gray-500 mt-2"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 实用贴士 -->
+    <section id="tips" class="py-24 bg-white">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <div class="inline-block px-4 py-1 bg-red-50 text-red-500 text-sm rounded-full mb-4">TIPS</div>
+                <h2 class="font-serif-sc text-4xl md:text-5xl font-bold mb-4">实用贴士</h2>
+                <p class="text-gray-500">新疆6-8月旅游旺季注意事项</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="tip-card bg-gradient-to-br from-red-50 to-white">
+                    <div class="text-3xl mb-3">🎫</div>
+                    <h4 class="font-serif-sc text-xl font-bold mb-2">提前抢自驾票</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        <b>孟克特、巴音布鲁克、喀拉峻、夏塔、玉湖</b>等景区自驾票需提前预约抢购，尤其是夏塔，票源紧张。
+                    </p>
+                </div>
+                <div class="tip-card bg-gradient-to-br from-blue-50 to-white">
+                    <div class="text-3xl mb-3">🌡️</div>
+                    <h4 class="font-serif-sc text-xl font-bold mb-2">温差大，带厚外套</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        6月伊犁昼夜温差可达15-20°C，高海拔地区更冷，<b>必备冲锋衣/抓绒</b>。
+                    </p>
+                </div>
+                <div class="tip-card bg-gradient-to-br from-amber-50 to-white">
+                    <div class="text-3xl mb-3">☀️</div>
+                    <h4 class="font-serif-sc text-xl font-bold mb-2">防晒是头等大事</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        新疆紫外线极强，<b>防晒霜（SPF50+）、墨镜、帽子、防晒衣</b>缺一不可。
+                    </p>
+                </div>
+                <div class="tip-card bg-gradient-to-br from-green-50 to-white">
+                    <div class="text-3xl mb-3">🕐</div>
+                    <h4 class="font-serif-sc text-xl font-bold mb-2">时差感调整</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        新疆使用北京时间，但地理时差约2小时。<b>日出约6:30，日落约21:30</b>。
+                    </p>
+                </div>
+                <div class="tip-card bg-gradient-to-br from-purple-50 to-white">
+                    <div class="text-3xl mb-3">🛣️</div>
+                    <h4 class="font-serif-sc text-xl font-bold mb-2">自驾路线要熟</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        独库公路段弯多限速严格，<b>S648宝柯段限高3.3米</b>。建议提前下载离线地图。
+                    </p>
+                </div>
+                <div class="tip-card bg-gradient-to-br from-pink-50 to-white">
+                    <div class="text-3xl mb-3">🍽️</div>
+                    <h4 class="font-serif-sc text-xl font-bold mb-2">必吃美食清单</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        <b>大盘鸡、烤全羊、羊肉串、抓饭、拉条子、馕、酸奶疙瘩、哈密瓜</b>。
+                    </p>
+                </div>
+                <div class="tip-card bg-gradient-to-br from-teal-50 to-white">
+                    <div class="text-3xl mb-3">📱</div>
+                    <h4 class="font-serif-sc text-xl font-bold mb-2">信号与支付</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        大部分景区有信号，但<b>独库中段、夏塔深处信号较弱</b>。建议准备少量现金。
+                    </p>
+                </div>
+                <div class="tip-card bg-gradient-to-br from-orange-50 to-white">
+                    <div class="text-3xl mb-3">🎒</div>
+                    <h4 class="font-serif-sc text-xl font-bold mb-2">必备装备</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        防水徒步鞋、厚外套、雨衣、头灯、充电宝、保温杯、晕车药、感冒药。
+                    </p>
+                </div>
+                <div class="tip-card bg-gradient-to-br from-indigo-50 to-white">
+                    <div class="text-3xl mb-3">📸</div>
+                    <h4 class="font-serif-sc text-xl font-bold mb-2">出片神器</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        <b>无人机、长焦镜头、三脚架</b>必备。红黄蓝色系的衣服在草原上更出片。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-xj-deep text-white py-16">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="grid md:grid-cols-3 gap-12 mb-12">
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="text-2xl">🏔️</span>
+                        <span class="font-serif-sc font-bold text-xl">西域·九日</span>
+                    </div>
+                    <p class="text-white/60 text-sm leading-relaxed">
+                        2026端午新疆伊犁9天8晚深度环线，穿越独库公路，探索巴音布鲁克、喀拉峻、夏塔、赛里木湖等核心景点。
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">快速导航</h4>
+                    <div class="space-y-2 text-sm text-white/60">
+                        <a href="#overview" class="block hover:text-xj-gold transition">行程概览</a>
+                        <a href="#timeline" class="block hover:text-xj-gold transition">每日行程</a>
+                        <a href="#spots" class="block hover:text-xj-gold transition">景点介绍</a>
+                        <a href="#hotels" class="block hover:text-xj-gold transition">住宿安排</a>
+                        <a href="#tips" class="block hover:text-xj-gold transition">实用贴士</a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">自定义行程</h4>
+                    <p class="text-white/60 text-sm leading-relaxed">
+                        点击右上角「编辑」按钮可以直接修改行程数据、活动、景点、经纬度等所有内容，修改后会自动保存在浏览器。
+                    </p>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-8 text-center text-white/50 text-sm">
+                <p class="mb-2">🌟 愿此行山河无恙，归来皆是故人 🌟</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 景点详情弹窗 -->
+    <div id="spotModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto relative modal-content">
+            <button id="closeModal" class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/90 hover:bg-white flex items-center justify-center transition shadow-lg">
+                <i class="ri-close-line text-xl"></i>
+            </button>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <!-- 分享弹窗 -->
+    <div id="shareModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl max-w-md w-full p-8 relative">
+            <button id="closeShareModal" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition">
+                <i class="ri-close-line"></i>
+            </button>
+            <h3 class="font-serif-sc text-2xl font-bold mb-2">📤 分享行程</h3>
+            <p class="text-gray-500 text-sm mb-6">复制链接分享给你的旅伴</p>
+            <div class="flex gap-2 mb-4">
+                <input id="shareUrl" type="text" readonly class="flex-1 px-4 py-3 bg-gray-50 rounded-xl text-sm border border-gray-200">
+                <button id="copyBtn" class="px-4 py-3 bg-xj-sky hover:bg-xj-deep text-white rounded-xl transition flex items-center gap-1">
+                    <i class="ri-file-copy-line"></i>
+                    <span id="copyBtnText">复制</span>
+                </button>
+            </div>
+            <div class="grid grid-cols-3 gap-3 text-center">
+                <div class="share-option">
+                    <div class="text-2xl mb-1">💬</div>
+                    <div class="text-xs text-gray-600">微信</div>
+                </div>
+                <div class="share-option">
+                    <div class="text-2xl mb-1">📱</div>
+                    <div class="text-xs text-gray-600">朋友圈</div>
+                </div>
+                <div class="share-option">
+                    <div class="text-2xl mb-1">🔗</div>
+                    <div class="text-xs text-gray-600">链接</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 数据编辑面板 -->
+    <div id="editModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl max-w-6xl w-full max-h-[92vh] overflow-hidden relative flex flex-col">
+            <!-- header -->
+            <div class="flex items-center justify-between p-5 border-b border-gray-100 bg-gradient-to-r from-xj-gold/10 to-xj-sunset/10">
+                <div>
+                    <h3 class="font-serif-sc text-2xl font-bold flex items-center gap-2">
+                        <i class="ri-edit-box-line text-xj-gold"></i>行程数据编辑器
+                    </h3>
+                    <p class="text-xs text-gray-500 mt-1">所有修改会自动保存到浏览器本地，刷新不丢失。可导出 / 导入 JSON 文件备份。</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="exportBtn" class="px-3 py-2 bg-white border border-gray-200 hover:bg-gray-50 rounded-lg text-sm flex items-center gap-1" title="导出为 JSON 文件">
+                        <i class="ri-download-2-line"></i> 导出
+                    </button>
+                    <label class="px-3 py-2 bg-white border border-gray-200 hover:bg-gray-50 rounded-lg text-sm flex items-center gap-1 cursor-pointer" title="从 JSON 文件导入">
+                        <i class="ri-upload-2-line"></i> 导入
+                        <input type="file" id="importInput" accept=".json" class="hidden">
+                    </label>
+                    <button id="resetBtn" class="px-3 py-2 bg-red-50 text-red-600 border border-red-100 hover:bg-red-100 rounded-lg text-sm flex items-center gap-1" title="还原为默认数据">
+                        <i class="ri-refresh-line"></i> 重置
+                    </button>
+                    <button id="closeEditModal" class="w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition">
+                        <i class="ri-close-line text-xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- tabs -->
+            <div class="flex border-b border-gray-100 bg-gray-50/50 px-5">
+                <button class="edit-tab active" data-tab="form">
+                    <i class="ri-list-check"></i> 表单编辑（推荐）
+                </button>
+                <button class="edit-tab" data-tab="json">
+                    <i class="ri-code-line"></i> JSON 源码
+                </button>
+            </div>
+
+            <!-- body -->
+            <div class="flex-1 overflow-hidden">
+                <!-- 表单编辑面板 -->
+                <div id="editFormPanel" class="edit-panel h-full flex overflow-hidden">
+                    <!-- 左侧 Day 列表 -->
+                    <div class="w-44 border-r border-gray-100 overflow-y-auto bg-gray-50/30 p-3" id="editDayList"></div>
+                    <!-- 右侧编辑区 -->
+                    <div class="flex-1 overflow-y-auto p-6" id="editDayContent"></div>
+                </div>
+                <!-- JSON 编辑面板 -->
+                <div id="editJsonPanel" class="edit-panel h-full hidden p-5">
+                    <textarea id="jsonEditor" class="w-full h-full border border-gray-200 rounded-xl p-4 font-mono text-xs resize-none focus:outline-none focus:border-xj-gold" spellcheck="false"></textarea>
+                </div>
+            </div>
+
+            <!-- footer -->
+            <div class="flex items-center justify-between gap-3 px-5 py-4 border-t border-gray-100 bg-gray-50/30">
+                <div class="text-xs text-gray-500" id="editStatus">✅ 已连接本地存储</div>
+                <div class="flex gap-2">
+                    <button id="cancelEditBtn" class="px-5 py-2 bg-white border border-gray-200 hover:bg-gray-50 rounded-full text-sm">取消</button>
+                    <button id="saveEditBtn" class="px-6 py-2 bg-gradient-to-r from-xj-gold to-xj-sunset text-white hover:shadow-lg rounded-full text-sm font-semibold flex items-center gap-1">
+                        <i class="ri-save-line"></i> 保存并应用
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="main.js?v=20260506"></script>
+</body>
+</html>
