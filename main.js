@@ -1,7 +1,7 @@
-import { itinerary as defaultItinerary, spots as defaultSpots, activityTypes, shareText } from './data.js?v=20260506';
+import { itinerary as defaultItinerary, spots as defaultSpots, activityTypes, shareText } from './data.js?v=20260627';
 
 // ==================== 本地存储管理 ====================
-const STORAGE_KEY = 'xj9days_custom_data_v1';
+const STORAGE_KEY = 'xj9days_custom_data_v2_actual_public';
 
 function loadCustomData() {
     try {
@@ -604,6 +604,8 @@ function renderDayActivities(idx) {
         `;
     }).join('');
 
+    const photosHtml = renderDayPhotos(day);
+
     // 小红书攻略区域
     const xhsHtml = (day.xhsLinks && day.xhsLinks.length > 0) ? `
         <div class="xhs-section">
@@ -635,7 +637,81 @@ function renderDayActivities(idx) {
         </div>
     ` : '';
 
-    container.innerHTML = activitiesHtml + xhsHtml;
+    container.innerHTML = activitiesHtml + photosHtml + xhsHtml;
+}
+
+function getDayPhotos(day) {
+    if (Array.isArray(day.photos) && day.photos.length > 0) return day.photos;
+
+    const fallbackByDay = {
+        1: ['tianshan', 'yining'],
+        2: ['yining', 'tangbula'],
+        3: ['tangbula', 'duku'],
+        4: ['duku', 'kuerdening'],
+        5: ['kuerdening'],
+        6: ['kalajun', 'xiata'],
+        7: ['xiata', 'sayram'],
+        8: ['sayram', 'guozigou', 'yining']
+    };
+    const ids = fallbackByDay[day.day] || [];
+    return ids
+        .map(id => state.spots.find(spot => spot.id === id))
+        .filter(Boolean)
+        .map(spot => ({
+            src: spot.img,
+            title: spot.name,
+            place: spot.categoryText,
+            note: spot.tip || spot.desc
+        }));
+}
+
+function renderDayPhotos(day) {
+    const photos = getDayPhotos(day);
+    if (!photos.length) return '';
+    return `
+        <div class="photo-section">
+            <div class="photo-section-head">
+                <div>
+                    <div class="photo-kicker">PHOTO WALL</div>
+                    <div class="photo-title">当日照片墙</div>
+                </div>
+                <span class="photo-count">${photos.length} 张</span>
+            </div>
+            <div class="photo-grid">
+                ${photos.map((photo, i) => renderPhotoCard(photo, day, i)).join('')}
+            </div>
+            <div class="photo-note"><i class="ri-shield-check-line"></i>公开版仅展示风景照片，不展示证件、票据、交通编号和个人身份信息。</div>
+        </div>
+    `;
+}
+
+function renderPhotoCard(photo, day, i) {
+    return `
+        <a class="photo-card" href="${escapeAttr(photo.src)}" target="_blank" rel="noopener" style="--photo-delay:${i * 0.06}s;">
+            <img src="${escapeAttr(photo.src)}" alt="${escapeAttr(photo.title || day.title)}" loading="lazy">
+            <div class="photo-overlay">
+                <span class="photo-index">${String(i + 1).padStart(2, '0')}</span>
+                <div>
+                    <div class="photo-name">${escapeHtml(photo.title || day.title)}</div>
+                    <div class="photo-place"><i class="ri-map-pin-2-line"></i>${escapeHtml(photo.place || day.to || '')}</div>
+                </div>
+            </div>
+        </a>
+    `;
+}
+
+function renderAllPhotos() {
+    const container = document.getElementById('allPhotosContainer');
+    if (!container) return;
+    const allPhotos = state.itinerary.flatMap(day =>
+        getDayPhotos(day).map((photo, idx) => ({ photo, day, idx }))
+    );
+    container.innerHTML = allPhotos.map(({ photo, day, idx }) => `
+        <div class="all-photo-wrap">
+            <div class="all-photo-day">Day ${day.day} · ${day.date}</div>
+            ${renderPhotoCard(photo, day, idx)}
+        </div>
+    `).join('');
 }
 
 // ==================== 渲染景点 ====================
@@ -738,26 +814,33 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 // ==================== 渲染酒店 ====================
 function renderHotels() {
     const container = document.getElementById('hotelsContainer');
-    const hotelDays = state.itinerary.filter(d => d.hotel && d.hotelPrice > 0);
-    container.innerHTML = hotelDays.map(day => `
-        <div class="hotel-card">
-            <div class="hotel-day">DAY ${day.day} · ${day.date}</div>
-            <div class="hotel-name">${day.hotel}</div>
-            <div class="hotel-loc">
-                <i class="ri-map-pin-line text-xj-gold"></i>
-                <span>${day.to}</span>
+    const hotelDays = state.itinerary.filter(d => d.hotel);
+    container.innerHTML = hotelDays.map(day => {
+        const hasPrice = Number(day.hotelPrice) > 0;
+        const priceHtml = hasPrice
+            ? `¥${day.hotelPrice}<span class="text-sm text-gray-400 font-normal ml-1">/晚</span>`
+            : '<span class="text-base text-gray-500 font-semibold">价格未公开</span>';
+        return `
+            <div class="hotel-card">
+                <div class="hotel-day">DAY ${day.day} · ${day.date}</div>
+                <div class="hotel-name">${day.hotel}</div>
+                <div class="hotel-loc">
+                    <i class="ri-map-pin-line text-xj-gold"></i>
+                    <span>${day.to}</span>
+                </div>
+                <div class="hotel-price">
+                    <div class="hotel-price-num">${priceHtml}</div>
+                    <span class="hotel-tag ${day.breakfast ? '' : 'no-breakfast'}">${day.breakfast ? '含早餐' : '住宿安排'}</span>
+                </div>
             </div>
-            <div class="hotel-price">
-                <div class="hotel-price-num">¥${day.hotelPrice}<span class="text-sm text-gray-400 font-normal ml-1">/晚</span></div>
-                <span class="hotel-tag ${day.breakfast ? '' : 'no-breakfast'}">${day.breakfast ? '含早餐' : '不含早'}</span>
-            </div>
-        </div>
-    `).join('');
-    const total = hotelDays.reduce((s, d) => s + (d.hotelPrice || 0), 0);
-    document.getElementById('hotelTotal').textContent = `¥ ${total.toLocaleString()}`;
-    document.getElementById('hotelAvg').textContent = hotelDays.length > 0
-        ? `均价约 ¥${Math.round(total / hotelDays.length)}/晚（视房型可能浮动）`
-        : '';
+        `;
+    }).join('');
+    const pricedDays = hotelDays.filter(d => Number(d.hotelPrice) > 0);
+    const total = pricedDays.reduce((s, d) => s + (d.hotelPrice || 0), 0);
+    document.getElementById('hotelTotal').textContent = pricedDays.length > 0 ? `¥ ${total.toLocaleString()}` : '价格未公开';
+    document.getElementById('hotelAvg').textContent = pricedDays.length > 0
+        ? `已公开价格 ${pricedDays.length} 晚，均价约 ¥${Math.round(total / pricedDays.length)}/晚`
+        : '已按表格补全住宿名称，价格未在公开版展示';
 }
 
 // ==================== 分享 ====================
@@ -1150,6 +1233,7 @@ function reloadAll() {
     renderDayHeader(currentDayIdx);
     renderDayActivities(currentDayIdx);
     if (dayMap) renderDayMap(currentDayIdx);
+    renderAllPhotos();
     renderSpots(document.querySelector('.filter-btn.active')?.dataset.filter || 'all');
     renderHotels();
     if (overviewMap) renderOverviewMap();

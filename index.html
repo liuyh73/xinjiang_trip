@@ -46,7 +46,7 @@
     <!-- Leaflet 地图（多 CDN 备用，保证外网环境也可访问） -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
     <!-- 自定义样式（放在 Leaflet 之后以确保覆盖；带版本号避免 GitHub Pages 强缓存） -->
-    <link rel="stylesheet" href="styles.css?v=20260507">
+    <link rel="stylesheet" href="styles.css?v=20260627">
     <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         // ============ Tailwind CDN 动态 DOM 兼容处理 ============
@@ -121,6 +121,7 @@
                 <a href="#hero" class="hover:text-xj-gold transition">首页</a>
                 <a href="#overview" class="hover:text-xj-gold transition">行程概览</a>
                 <a href="#timeline" class="hover:text-xj-gold transition">每日行程</a>
+                <a href="#photos" class="hover:text-xj-gold transition">照片墙</a>
                 <a href="#spots" class="hover:text-xj-gold transition">景点介绍</a>
                 <a href="#hotels" class="hover:text-xj-gold transition">住宿安排</a>
                 <a href="#tips" class="hover:text-xj-gold transition">实用贴士</a>
@@ -156,10 +157,10 @@
                 <span class="block text-xj-gold mt-2">一眼千年</span>
             </h1>
             <p class="text-lg md:text-2xl font-light tracking-wide mb-4 fade-in fade-delay-2">
-                独库公路 · 巴音布鲁克 · 喀拉峻 · 夏塔 · 赛里木湖
+                唐布拉 · 孟克特古道 · 独库公路 · 夏塔 · 赛里木湖
             </p>
             <p class="text-sm md:text-base text-white/80 mb-12 fade-in fade-delay-2">
-                06.13 — 06.21 · 伊犁深度环线 · 9 DAYS 8 NIGHTS
+                06.13 — 06.21 · 伊犁实走环线 · 9 DAYS 8 NIGHTS · 已脱敏公开版
             </p>
             
             <div class="flex flex-wrap justify-center gap-4 fade-in fade-delay-3">
@@ -187,8 +188,8 @@
                     <div class="text-xs md:text-sm text-white/70 mt-1">公里路程</div>
                 </div>
                 <div class="text-center">
-                    <div class="text-3xl md:text-4xl font-serif-sc font-bold text-xj-gold">8</div>
-                    <div class="text-xs md:text-sm text-white/70 mt-1">人小团</div>
+                    <div class="text-3xl md:text-4xl font-serif-sc font-bold text-xj-gold">脱敏</div>
+                    <div class="text-xs md:text-sm text-white/70 mt-1">公开版本</div>
                 </div>
             </div>
         </div>
@@ -220,14 +221,14 @@
                         <i class="ri-car-line text-3xl text-xj-gold"></i>
                     </div>
                     <h3 class="font-serif-sc text-2xl font-bold mb-2">出行方式</h3>
-                    <p class="text-gray-600 leading-relaxed">飞机抵达乌鲁木齐/伊宁<br>伊犁全程自驾环线</p>
+                    <p class="text-gray-600 leading-relaxed">抵达乌鲁木齐/伊宁后集合<br>伊犁全程自驾环线</p>
                 </div>
                 <div class="p-8 rounded-3xl bg-gradient-to-br from-green-50 to-white border border-green-100 hover:shadow-xl transition">
                     <div class="w-14 h-14 rounded-2xl bg-xj-grass/10 flex items-center justify-center mb-4">
                         <i class="ri-team-line text-3xl text-xj-grass"></i>
                     </div>
-                    <h3 class="font-serif-sc text-2xl font-bold mb-2">出行人员</h3>
-                    <p class="text-gray-600 leading-relaxed">8人小团 · 深港沪京郑汇合<br>最晚06.13晚在伊犁会合</p>
+                    <h3 class="font-serif-sc text-2xl font-bold mb-2">公开信息</h3>
+                    <p class="text-gray-600 leading-relaxed">已隐藏同行成员与交通细节<br>仅展示时间、地点、路线与风景照片</p>
                 </div>
             </div>
 
@@ -239,13 +240,17 @@
                     <i class="ri-arrow-right-line text-xj-gold"></i>
                     <span class="route-node">伊宁</span>
                     <i class="ri-arrow-right-line text-xj-gold"></i>
+                    <span class="route-node">六星街</span>
+                    <i class="ri-arrow-right-line text-xj-gold"></i>
                     <span class="route-node">唐布拉</span>
                     <i class="ri-arrow-right-line text-xj-gold"></i>
-                    <span class="route-node">巴音布鲁克</span>
+                    <span class="route-node">孟克特</span>
+                    <i class="ri-arrow-right-line text-xj-gold"></i>
+                    <span class="route-node">独库公路</span>
                     <i class="ri-arrow-right-line text-xj-gold"></i>
                     <span class="route-node">库尔德宁</span>
                     <i class="ri-arrow-right-line text-xj-gold"></i>
-                    <span class="route-node">喀拉峻</span>
+                    <span class="route-node">特克斯</span>
                     <i class="ri-arrow-right-line text-xj-gold"></i>
                     <span class="route-node">夏塔</span>
                     <i class="ri-arrow-right-line text-xj-gold"></i>
@@ -278,35 +283,24 @@
                 <div id="overviewMap" style="height: 520px; width: 100%;"></div>
             </div>
 
-            <!-- 成员汇合 -->
+            <!-- 公开版说明 -->
             <div class="mt-16">
-                <h3 class="font-serif-sc text-2xl font-bold mb-6 text-center">🛫 成员汇合方式</h3>
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                    <div class="member-card">
-                        <div class="text-2xl mb-2">🇭🇰</div>
-                        <div class="font-semibold">刘亚辉 · 张问津</div>
-                        <div class="text-xs text-gray-500 mt-1">香港 → 乌鲁木齐</div>
-                        <div class="text-xs text-xj-sky mt-1">CX998 · 01:15</div>
+                <h3 class="font-serif-sc text-2xl font-bold mb-6 text-center">🔒 公开版信息说明</h3>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="member-card privacy-card">
+                        <div class="text-2xl mb-2">🛡️</div>
+                        <div class="font-semibold">已隐藏个人信息</div>
+                        <div class="text-xs text-gray-500 mt-1">姓名、出发地、个人返程去向不在页面展示</div>
                     </div>
-                    <div class="member-card">
-                        <div class="text-2xl mb-2">🏙️</div>
-                        <div class="font-semibold">孙长江 · 王星星 · 伍治鑫</div>
-                        <div class="text-xs text-gray-500 mt-1">上海 → 乌鲁木齐/伊犁</div>
+                    <div class="member-card privacy-card">
+                        <div class="text-2xl mb-2">🚄</div>
+                        <div class="font-semibold">已隐藏交通编号</div>
+                        <div class="text-xs text-gray-500 mt-1">具体交通编号只保留为“抵达、转场、返程”节点</div>
                     </div>
-                    <div class="member-card">
-                        <div class="text-2xl mb-2">🌆</div>
-                        <div class="font-semibold">赵一霖 · 彭钰欣</div>
-                        <div class="text-xs text-gray-500 mt-1">郑州 → 乌鲁木齐/伊犁</div>
-                    </div>
-                    <div class="member-card">
-                        <div class="text-2xl mb-2">🏛️</div>
-                        <div class="font-semibold">何迪</div>
-                        <div class="text-xs text-gray-500 mt-1">北京 → 乌鲁木齐</div>
-                    </div>
-                    <div class="member-card">
-                        <div class="text-2xl mb-2">🌏</div>
-                        <div class="font-semibold">赵江</div>
-                        <div class="text-xs text-gray-500 mt-1">出发地待定</div>
+                    <div class="member-card privacy-card">
+                        <div class="text-2xl mb-2">📸</div>
+                        <div class="font-semibold">只展示风景照片</div>
+                        <div class="text-xs text-gray-500 mt-1">证件、票据、联系方式等敏感内容不展示</div>
                     </div>
                 </div>
             </div>
@@ -361,6 +355,18 @@
         </div>
     </section>
 
+    <!-- 全程照片墙 -->
+    <section id="photos" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <div class="inline-block px-4 py-1 bg-xj-gold/10 text-xj-gold text-sm rounded-full mb-4">PHOTOS</div>
+                <h2 class="font-serif-sc text-4xl md:text-5xl font-bold mb-4">实走照片墙</h2>
+                <p class="text-gray-500 max-w-2xl mx-auto">按实际行程串联风景照片、路线节点与打卡地点；公开版仅展示风景内容</p>
+            </div>
+            <div id="allPhotosContainer" class="all-photos-grid"></div>
+        </div>
+    </section>
+
     <!-- 景点介绍 -->
     <section id="spots" class="py-24 bg-white">
         <div class="max-w-7xl mx-auto px-6">
@@ -389,7 +395,7 @@
             <div class="text-center mb-16">
                 <div class="inline-block px-4 py-1 bg-xj-sunset/10 text-xj-sunset text-sm rounded-full mb-4">ACCOMMODATION</div>
                 <h2 class="font-serif-sc text-4xl md:text-5xl font-bold mb-4">住宿安排</h2>
-                <p class="text-gray-500">8晚住宿 · 全部已预订</p>
+                <p class="text-gray-500">按实际行程表补全住宿节点 · 价格缺失则以“价格未公开”展示</p>
             </div>
 
             <div id="hotelsContainer" class="grid md:grid-cols-2 lg:grid-cols-4 gap-6"></div>
@@ -623,6 +629,6 @@
         </div>
     </div>
 
-    <script type="module" src="main.js?v=20260506"></script>
+    <script type="module" src="main.js?v=20260627"></script>
 </body>
 </html>

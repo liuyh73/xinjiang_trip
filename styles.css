@@ -820,6 +820,137 @@ body {
 .col-span-2 { grid-column: span 2 / span 2; }
 
 /* ============================ */
+/* ====== 照片墙 ====== */
+/* ============================ */
+.photo-section {
+    margin-top: 1.75rem;
+    padding: 1.25rem;
+    border-radius: 1.5rem;
+    background: linear-gradient(135deg, #f8fafc 0%, #fff7ed 100%);
+    border: 1px solid #f3e8d6;
+    box-shadow: 0 8px 28px rgba(15, 23, 42, 0.05);
+    animation: fadeInUp 0.5s ease-out both;
+}
+.photo-section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+.photo-kicker {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: #D4A574;
+}
+.photo-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #1f2937;
+}
+.photo-count {
+    flex-shrink: 0;
+    padding: 0.22rem 0.7rem;
+    border-radius: 9999px;
+    background: rgba(212, 165, 116, 0.14);
+    color: #B45309;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+.photo-grid,
+.all-photos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 0.85rem;
+}
+.photo-card {
+    position: relative;
+    display: block;
+    height: 190px;
+    border-radius: 1rem;
+    overflow: hidden;
+    background: #e5e7eb;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+    text-decoration: none;
+    color: inherit;
+    animation: fadeInUp 0.45s ease-out both;
+    animation-delay: var(--photo-delay, 0s);
+}
+.photo-card img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+.photo-card:hover img { transform: scale(1.08); }
+.photo-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    gap: 0.65rem;
+    padding: 0.9rem;
+    background: linear-gradient(to top, rgba(15, 23, 42, 0.76), rgba(15, 23, 42, 0.1) 60%, transparent);
+    color: white;
+}
+.photo-index {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+.photo-name {
+    font-weight: 800;
+    font-size: 0.92rem;
+    line-height: 1.35;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.25);
+}
+.photo-place {
+    display: flex;
+    align-items: center;
+    gap: 0.22rem;
+    margin-top: 0.18rem;
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.82);
+}
+.photo-note {
+    margin-top: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.75rem;
+    color: #64748b;
+}
+.all-photo-wrap { position: relative; }
+.all-photo-wrap .photo-card { height: 230px; }
+.all-photo-day {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 2;
+    padding: 0.24rem 0.65rem;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(8px);
+    color: #B45309;
+    font-size: 0.72rem;
+    font-weight: 800;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+.privacy-card::before { opacity: 1; }
+
+/* ============================ */
 /* ====== 小红书攻略卡片 ====== */
 /* ============================ */
 .xhs-section {
@@ -978,6 +1109,10 @@ body {
     #editDayList { width: 110px !important; }
     .xhs-list { grid-template-columns: 1fr; }
     .xhs-section { padding: 1rem; }
+    .photo-grid,
+    .all-photos-grid { grid-template-columns: 1fr; }
+    .photo-card,
+    .all-photo-wrap .photo-card { height: 220px; }
     .xj-marker-label { display: none; }
 }
 
